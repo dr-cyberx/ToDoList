@@ -1,0 +1,123 @@
+html {
+  background-color: #E4E9FD;
+  background-image: -webkit-linear-gradient(65deg, #839ee3 50%, #e4effd 50%);
+  min-height: 1000px;
+  font-family: 'helvetica neue';
+  transition: all 0.2s ease-in-out;
+}
+
+h1 {
+  color: rgb(247, 247, 247);
+  padding: 10px;
+  text-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+ font-size: 1.92rem;;
+}
+
+.box {
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  margin: 50px auto;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+  width: 100%;
+}
+.box label{
+  font-size: 1.2rem;
+  color: rgb(36, 36, 36);
+}
+
+input[type='checkbox']{
+  margin: auto;
+  width: 20%;
+  height: 20px;
+}
+
+.topPlate {
+  background-color: #839ee3;
+  text-align: center;
+  width: 30%;
+  margin: auto;
+  border-radius: 7px;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+  margin-top: 50px;
+  margin-bottom: 80px;
+}
+
+.item {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #F1F1F1;
+}
+
+.item:last-child {
+  border-bottom: 0;
+}
+
+input:checked+label {
+  text-decoration: line-through;
+  text-decoration-color: #A683E3;
+  opacity: 0.7;
+}
+
+input[type="checkbox"] {
+  margin: 20px;
+}
+
+p {
+  margin: 0;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 200;
+  color: #00204a;
+}
+
+form.form2 {
+  text-align: center;
+  margin-left: 20px;
+}
+
+button {
+  min-height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border-color: transparent;
+  background-color: #839ee3;
+  color: #fff;
+  font-size: 40px;
+  padding-bottom: 6px;
+  border-width: 0;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+button:hover{
+  background-color: #946bdb;
+  transform: scale(1.2);
+}
+
+input[type="text"] {
+  text-align: center;
+  height: 60px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  font-weight: 200;
+  width: 313px;
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  box-shadow: inset 0 -3px 0 0 #A683E3;
+}
+
+
+footer {
+  color: white;
+  color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
