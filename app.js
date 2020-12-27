@@ -33,6 +33,13 @@ const item3 = new todoDBitem({
 
 const defaultItems = [item1, item2, item3];
 
+const customRootSchema = {
+   name: String,
+   item: [todoSchema]
+}
+
+const customRootList = mongoose.model('List', customRootSchema);
+
 app.get('/', function (req, res) {
 
    todoDBitem.find({}, function (err, result) {
@@ -64,20 +71,40 @@ app.post('/', function (req, res) {
 
 app.post('/delete', (req, res) => {
    let checkData = req.body.checkboxData;
-      todoDBitem.deleteMany({ _id: checkData }, function (err1) {
-         if (err1) {
-            // console.log('there was an error' + err1)
-         } else {
-            // console.log("deleted successfully");
-         }
-         res.redirect('/');
-      });
+   todoDBitem.deleteMany({ _id: checkData }, function (err1) {
+      if (err1) {
+         // console.log('there was an error' + err1)
+      } else {
+         // console.log("deleted successfully");
+      }
+      res.redirect('/');
+   });
 });
 
-app.get('/:id' , function(req , res){
-   console.log(req.params.id);
-   res.redirect('/')
-})
+app.get('/:id', function (req, res) {
+   const CustomRoot = req.params.id;
+   // console.log(CustomRoot);
+   if (CustomRoot != 'favicon.ico') {
+      customRootList.findOne({ name: CustomRoot }, function (err, result) {
+         if (!err) {
+            if (!result) {
+               const customRootlist = new customRootList({
+                  name: CustomRoot,
+                  item: defaultItems
+               });
+               customRootlist.save();
+               res.redirect('/' + CustomRoot, { date: result.name, items: result.item });
+            } else {
+               res.render('index', { date: result.name, items: result.item });
+            }
+         }
+      });
+
+   }
+
+
+
+});
 
 app.listen(port, hostname, function () {
    console.log(`The server is running at http://${hostname}:${port}`);
