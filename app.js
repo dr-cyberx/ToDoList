@@ -3,6 +3,7 @@ const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
 const ejs = require('ejs');
 const date = require(__dirname + '/timedata.js');
+const _ = require('lodash');
 
 const hostname = '127.0.0.1';
 const port = 5500;
@@ -10,10 +11,12 @@ const port = 5500;
 let Today = date.getDate();
 
 const app = express();
+
 app.set('view engine', 'ejs')
 app.use('/public', express.static('public'));
 app.use(bodyparser.urlencoded({ extended: true }));
 mongoose.connect('mongodb://127.0.0.1:27017/todolistDB', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.set('useFindAndModify', false);
 
 const todoSchema = mongoose.Schema({
    name: String
@@ -54,35 +57,56 @@ app.get('/', function (req, res) {
          });
          res.redirect('/');
       } else {
-         res.render('index', { date: Today, items: result });
+         res.render('index', { date: "Today", items: result });
       }
    })
 });
 
 app.post('/', function (req, res) {
    let todoData = req.body.data;
+   let btn2val = req.body.btn2value;
+   console.log(btn2val);
    const itemName = new todoDBitem({
       name: todoData
    });
-   itemName.save();
-   res.redirect('/')
+   if (btn2val === 'Today') {
+
+      itemName.save();
+      res.redirect('/')
+   } else {
+      customRootList.findOne({ name: btn2val }, function (err, foundList) {
+         foundList.item.push(itemName);
+         foundList.save();
+         res.redirect("/" + btn2val);
+      })
+   }
+
 });
 
 
 app.post('/delete', (req, res) => {
    let checkData = req.body.checkboxData;
-   todoDBitem.deleteMany({ _id: checkData }, function (err1) {
-      if (err1) {
-         // console.log('there was an error' + err1)
-      } else {
-         // console.log("deleted successfully");
-      }
-      res.redirect('/');
-   });
+   const listTitle = req.body.hiddenInput;
+
+   if (listTitle === 'Today') {
+      todoDBitem.deleteMany({ _id: checkData }, function (err1) {
+         if (!err1) {
+            // console.log('there was an error' + err1)
+            res.redirect('/');
+         }
+      });
+   } else {
+      customRootList.findOneAndUpdate({ name: listTitle }, { $pull: { item: { _id: checkData } } }, function (err, result) {
+         if (!err) {
+            res.redirect('/' + listTitle);
+         }
+      });
+   }
+
 });
 
 app.get('/:id', function (req, res) {
-   const CustomRoot = req.params.id;
+   const CustomRoot = _.capitalize(req.params.id);
    // console.log(CustomRoot);
    if (CustomRoot != 'favicon.ico') {
       customRootList.findOne({ name: CustomRoot }, function (err, result) {
@@ -93,17 +117,13 @@ app.get('/:id', function (req, res) {
                   item: defaultItems
                });
                customRootlist.save();
-               res.redirect('/' + CustomRoot, { date: result.name, items: result.item });
+               res.redirect('/' + CustomRoot);
             } else {
                res.render('index', { date: result.name, items: result.item });
             }
          }
       });
-
    }
-
-
-
 });
 
 app.listen(port, hostname, function () {

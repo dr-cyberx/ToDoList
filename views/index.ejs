@@ -20,12 +20,13 @@
             <input name="checkboxData" type="checkbox" value="<%= item._id %>" onChange="this.form.submit()">
             <label for="fname"><%= item.name %></label>
          </div>
+         <input type="hidden" name="hiddenInput" value="<%=date%>"></input>
       </form>
       <%  }); %>
 
       <form class="form2" action="/" method="POST">
          <input type="text" placeholder="Enter the item" name="data">
-         <button type="submit">+</button>
+         <button type="submit" name="btn2value" value="<%= date %>">+</button>
       </form>
    </div>
 
